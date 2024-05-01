@@ -8,7 +8,7 @@ export const fileType = {
 function fileUpload(customTypes = []) {
     const storage = multer.diskStorage({});
     function fileFilter(req, file, cb) {
-        if (customTypes.includes(file.mimeType)) {
+        if (customTypes.includes(file.mimetype)) {
             cb(null, true);
         } else {
             cb("invalid file type", false);

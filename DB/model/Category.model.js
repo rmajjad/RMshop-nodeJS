@@ -1,4 +1,4 @@
-import { Model, Schema, Types } from "mongoose";
+import { Schema, Types, model } from "mongoose";
 
 
 const categorySchema = new Schema({
@@ -22,14 +22,16 @@ const categorySchema = new Schema({
     createdBy:{
         type: Types.ObjectId,
         ref: 'User',
-        requered: true,
+        
     },
     updatedBy:{
         type: Types.ObjectId,
         ref: 'User',
-        requered: true,
+        
     },
+},{
+    timestamps: true
 });
 
-const categoryModel = new Model('Category', categorySchema);
+const categoryModel = new model('Category', categorySchema);
 export default categoryModel;
