@@ -10,8 +10,7 @@ export const getAll = (req, res) => {
 export const createCategory = async(req, res, next) => {
     req.body.name = req.body.name.toLowerCase();
     
-    //return res.json(req.body);
-    if( await categoryModel.findOne({name:req.body.name})){
+    if(await categoryModel.findOne({name:req.body.name})){
         return res.status(409).json({message:"category already exists"});
     }
     req.body.slug = slugify(req.body.name);
