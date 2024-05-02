@@ -22,6 +22,6 @@ export const createCategory = async(req, res, next) => {
 
     req.body.image = {secure_url,public_id};
 
-    const category = await categoryModel.create(req.body); 
+    const category = await categoryModel.create(req.body);  
     return res.json({message:"success", category});
 };
