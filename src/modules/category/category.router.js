@@ -1,16 +1,17 @@
 import { Router } from "express";
-import * as categoryController from "./category.controller.js";
+import * as Controller from "./category.controller.js";
 import fileUpload, { fileType } from "../../utils/multer.js";
+import { auth } from "../../middleware/auth.js";
 
 const router = Router();
 
 
-router.post('/',fileUpload(fileType.image).single('image'),categoryController.createCategory)
-router.get('/',categoryController.getAll);
-router.get('/active',categoryController.getActive);
-router.get('/:id',categoryController.getDetails);
-router.patch('/:id',fileUpload(fileType.image).single('image'),categoryController.updateCategory);
-router.delete('/:id',categoryController.destroy);
+router.post('/',auth(),fileUpload(fileType.image).single('image'),Controller.create);
+router.get('/',Controller.getAll);
+router.get('/active',Controller.getActive);
+router.get('/:id',Controller.getDetails);
+router.patch('/:id',auth(),fileUpload(fileType.image).single('image'),Controller.update);
+router.delete('/:id',auth(),Controller.destroy);
 
 
 export default router;

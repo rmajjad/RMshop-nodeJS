@@ -5,7 +5,8 @@ import cloudinary from "../../utils/cloudinary.js";
 
 
 
-export const createCategory = async(req, res, next) => {
+export const create = async(req, res, next) => {
+
     req.body.name = req.body.name.toLowerCase();
     
     if(await categoryModel.findOne({name:req.body.name})){
@@ -18,6 +19,9 @@ export const createCategory = async(req, res, next) => {
     });
 
     req.body.image = {secure_url,public_id};
+
+    req.body.createdBy = req.user._id
+    req.body.updatedBy = req.user._id;
 
     const category = await categoryModel.create(req.body);  
     return res.json({message:"success", category});
@@ -46,10 +50,10 @@ export const getDetails = async(req, res) => {
 
 
 
-export const updateCategory = async(req, res) => {
+export const update = async(req, res) => {
     const category = await categoryModel.findById(req.params.id);
     if(!category){
-        return res.status(404).json({message:"category not found"});
+        return res.status(404).json({message:"category not found"}); 
     }
     category.name = req.body.name.toLowerCase();
     if(await categoryModel.findOne({name:req.body.name,_id:{$ne:req.params.id}})){
@@ -65,6 +69,7 @@ export const updateCategory = async(req, res) => {
         category.image = {secure_url,public_id};
     }
     category.status = req.body.status;
+    category.updatedBy = req.user._id;
     await category.save();
     
     return res.json({message:"success", category});
