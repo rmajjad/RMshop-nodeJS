@@ -78,7 +78,7 @@ export const update = async(req, res) => {
 export const destroy = async(req,res)=> {
     const category = await categoryModel.findByIdAndDelete(req.params.id);
     if(!category){
-        return res.status(404).json("category not found");
+        return res.status(404).json({message:"category not found"});
     }
     await cloudinary.uploader.destroy(category.image.public_id);
 
