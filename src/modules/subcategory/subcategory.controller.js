@@ -37,7 +37,16 @@ export const create = async(req, res, next) => {
 export const getAll = async(req, res) => {
     const {id} = req.params;
 
-    const subcategories = await subcategoryModel.find({categoryId:id});
+    const subcategories = await subcategoryModel.find({categoryId:id}).populate([{
+        path:'createdBy',
+        select:'userName'
+    },
+    {
+        path:'updatedBy',
+        select: 'userName'
+    }
+
+]);
 
     return res.status(200).json({message:"success",subcategories});
 };
