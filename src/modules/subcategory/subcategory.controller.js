@@ -1,11 +1,18 @@
 import slugify from "slugify";
 import categoryModel from "../../../DB/model/Category.model.js";
 import cloudinary from "../../utils/cloudinary.js";
+import subcategoryModel from "../../../DB/model/Subcategory.model.js";
 
 
 
 
 export const create = async(req, res, next) => {
+
+    const {categoryId} = req.body;
+    const category = await categoryModel.findById(categoryId);
+    if(!category){
+        return res.status(404).json({message: "Category not found"})
+    }
 
     req.body.name = req.body.name.toLowerCase();
     
@@ -15,7 +22,7 @@ export const create = async(req, res, next) => {
     req.body.slug = slugify(req.body.name);
 
     const {secure_url,public_id} = await cloudinary.uploader.upload(req.file.path,{
-        folder: `${process.env.APPNAME}/categories`
+        folder: `${process.env.APPNAME}/subcategories`
     });
 
     req.body.image = {secure_url,public_id};
@@ -23,25 +30,16 @@ export const create = async(req, res, next) => {
     req.body.createdBy = req.user._id
     req.body.updatedBy = req.user._id;
 
-    const category = await categoryModel.create(req.body);  
-    return res.json({message:"success", category});
+    const subcategory = await subcategoryModel.create(req.body);  
+    return res.json({message:"success", subcategory});
 };
 
 export const getAll = async(req, res) => {
-    const categories = await categoryModel.find({}).populate([{
-        path: "createdBy",
-        select: "userName"
-    },
-    {
-        path: "updatedBy",
-        select: "userName"
-    },
-    {
-        path: "subcategory"
-    }
-]);
+    const {id} = req.params;
 
-    return res.status(200).json({message:"success",categories});
+    const subcategories = await subcategoryModel.find({categoryId:id});
+
+    return res.status(200).json({message:"success",subcategories});
 };
 
 export const getActive = async(req, res) => {
@@ -73,7 +71,7 @@ export const update = async(req, res) => {
     category.slug = slugify(req.body.name);
     if(req.file){
         const {secure_url,public_id} = await cloudinary.uploader.upload(req.file.path,{
-            folder: `${process.env.APPNAME}/categories`
+            folder: `${process.env.APPNAME}/subcategories`
         });
         await cloudinary.uploader.destroy(category.image.public_id);
 

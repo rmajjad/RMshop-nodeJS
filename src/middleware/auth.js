@@ -21,6 +21,6 @@ export const auth = ()=>{
             return res.status(400).json({message:"user not found"});
         }
         req.user = user; 
-        next(); 
+        next();  
     }
 } 
