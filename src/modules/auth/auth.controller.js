@@ -52,7 +52,6 @@ export const registor = async (req, res) => {
 </html>
 `);
 
-
     return res.status(201).json({ message: "success", user: createUser });
 }
 
