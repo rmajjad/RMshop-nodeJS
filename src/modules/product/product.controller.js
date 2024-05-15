@@ -9,9 +9,9 @@ export const create = async(req,res) => {
 
     const {name,price,discount,categoryId,subcategoryId} = req.body;
     const checkCategory = await categoryModel.findById(categoryId);
-    if(name){
-        return res.json({message:"Product already exists"});
-    }
+    
+    
+
     if(!checkCategory){
         return res.status(404).json({message: "Category not found"});
     }
@@ -19,6 +19,9 @@ export const create = async(req,res) => {
     if(!checksubCategory){
         return res.status(404).json({message: "subcategory not found"});
     }
+    if(await productModel.findOne({name})){
+        return res.status(409).json({message:"product already exists"});
+    }else{
     req.body.slug = slugify(name);
     req.body.finalPrice = price - ((price*(discount||0))/100);
 
@@ -30,11 +33,12 @@ export const create = async(req,res) => {
         {folder: `${process.env.APPNAME}/product/${name}/subImages`});
         req.body.subImages.push({secure_url,public_id});
     }
-
+    
+    
     const product = await productModel.create(req.body);
     return res.json({message:"success",product});
 }
-
+}
 export const getAll = (req, res) => {
     return res.json({message:"product"})
 }
