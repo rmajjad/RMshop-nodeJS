@@ -6,7 +6,7 @@ import productModel from "../../../DB/model/Product.model.js";
 
 
 export const create = async(req,res) => {
-
+    
     const {name,price,discount,categoryId,subcategoryId} = req.body;
     const checkCategory = await categoryModel.findById(categoryId);
     
@@ -42,3 +42,5 @@ export const create = async(req,res) => {
 export const getAll = (req, res) => {
     return res.json({message:"product"})
 }
+
+

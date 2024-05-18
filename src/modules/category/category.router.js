@@ -2,7 +2,7 @@ import { Router } from "express";
 import * as Controller from "./category.controller.js";
 import subcategoryRouter from './../subcategory/subcategory.router.js';
 import fileUpload, { fileType } from "../../utils/multer.js";
-import { auth, roles } from "../../middleware/auth.js";
+import { auth } from "../../middleware/auth.js";
 import { endPoints } from "./category.role.js";
 
 const router = Router();
