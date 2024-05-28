@@ -1,4 +1,5 @@
 import cartModel from "../../../DB/model/Cart.model.js";
+import productModel from "../../../DB/model/Product.model.js";
 
 
 export const get = async (req,res) => {
@@ -8,6 +9,7 @@ export const get = async (req,res) => {
 
 export const create = async(req, res) => {
     const {productId} = req.body;
+    
     const cart = await cartModel.findOne({userId: req.user._id});
     if(!cart){
         const newCart = await cartModel.create({
@@ -21,10 +23,10 @@ export const create = async(req, res) => {
             return res.json({message:"product already exists"});
         }
     }
+
     cart.products.push({productId});
     await cart.save();
-    return res.json({message:"success", cart});
-    
+    return res.json({message:"success", cart}); 
 };
 
 export const updateQuantity = async (req, res) => {
