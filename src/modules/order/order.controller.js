@@ -23,7 +23,7 @@ export const create = async(req, res) => {
         if(coupon.expireDate < new Date()){
             return res.status(400).json({message:"coupon expired"});
         } 
-        if(coupon.usedBy.includes(req.user._id)){
+        if(coupon.usedBy.includes(req.user._id)){ 
             return res.status(409).json({message:"coupon already used "})
         }
         req.body.coupon = coupon;
@@ -126,7 +126,8 @@ export const getUserOrders = async(req, res) => {
 export const changeStatus = async(req, res) => {
     const {orderId} = req.params;
     const {status} =  req.body;
-    const order = await orderModel.findOne({orderId});
+
+    const order = await orderModel.findById(orderId);
     if(!order){
         return res.status(400).json({message:"order not found"});
     }

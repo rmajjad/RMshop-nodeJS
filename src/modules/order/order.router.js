@@ -10,7 +10,7 @@ const router = Router();
 router.post('/',auth(endPoints.create),Controller.create);
 router.get('/all', auth(endPoints.getAll),Controller.getOrders);
 router.get('/userOrder', auth(endPoints.getUserOrder),Controller.getUserOrders);
-router.patch('/changeStatus/:id', auth(endPoints.changeStatus),Controller.changeStatus)
+router.patch('/changeStatus/:orderId', auth(endPoints.changeStatus),Controller.changeStatus)
 
 
 export default router;
