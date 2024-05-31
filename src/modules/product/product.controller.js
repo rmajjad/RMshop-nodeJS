@@ -39,8 +39,17 @@ export const create = async(req,res) => {
     return res.json({message:"success",product});
 }
 }
-export const getAll = (req, res) => {
-    return res.json({message:"product"})
+export const getAll = async(req, res) => {
+    const products = await productModel.find({}).populate({
+        path:'reviews',
+        populate:{
+            path:'userId',
+            select:'userName -_id'
+        }
+
+    });
+
+    return res.json({message:"success",products});
 }
 
 
