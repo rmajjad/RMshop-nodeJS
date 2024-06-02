@@ -28,7 +28,11 @@ const orderSchema = new Schema({
         finalPrice:{
             type:Number,
             required:true,
-        }
+        },
+        mainImage: {
+            type: Object,
+            requered: true,
+        },
     }],
     
     finalPrice:{

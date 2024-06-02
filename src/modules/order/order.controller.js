@@ -45,14 +45,14 @@ export const create = async(req, res) => {
 
         product = product.toObject();
         
-        product.name = checkProduct.name;
+        product.productName = checkProduct.name;
+        product.mainImage = checkProduct.mainImage;
         product.discount = checkProduct.discount;
         product.unitPrice = checkProduct.price;
         product.finalPrice = product.quantity * checkProduct.finalPrice;
         subTotal += product.finalPrice
         finalProductList.push(product);
 
-        ///return res.json(product);
     }
 
     const user = await userModel.findById(req.user._id);
@@ -62,7 +62,7 @@ export const create = async(req, res) => {
     if(!req.body.phone){
         req.body.phone = user.phone;
     }
-
+    
     const order = await orderModel.create({
         userId: req.user._id,
         products: finalProductList,
@@ -71,7 +71,7 @@ export const create = async(req, res) => {
         phoneNumber : req.body.phone,
         updatedBy:req.user._id,
     });
-
+    
 
     if(order){
 
@@ -84,6 +84,7 @@ export const create = async(req, res) => {
                 }
             )
         }
+        
         if(req.body.coupon){
             await couponModel.findByIdAndUpdate({_id:req.body.coupon._id},
                 {
@@ -94,12 +95,11 @@ export const create = async(req, res) => {
                 }
             );
         }
-
+    
         await cartModel.findOneAndUpdate({userId:req.user._id},{
             products : []
         })
     }
-
     await order.save();
     return res.json({message:"success",order});
     
