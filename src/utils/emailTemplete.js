@@ -27,7 +27,7 @@ export const emailTemplete = (email,userName, token) => {
             <p>If you have any questions, feel free to contact us at <a href = '${process.env.SENDEREMAIL}' style="text-decoration: none;"><b>Our Email</a></b>.</p>
             <p>Welcome aboard,</p>
             <p>Your friends at Our Store</p>
-            <a href = 'http://localhost:3000/auth/confirmEmail/${token}' >confirm your email</a>
+            <a href = 'https://rmshop-nodejs.onrender.com/auth/confirmEmail/${token}' >confirm your email</a>
         </div>
         <div class="footer">
             <p>You received this email because you registered at our website. If you believe this was a mistake, please ignore this email or contact us.</p>
