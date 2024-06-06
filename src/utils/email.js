@@ -1,7 +1,8 @@
 import nodemailer from "nodemailer";
+import { emailTemplete } from "./emailTemplete.js";
 
 
-export async function sendEmail(to,subject,html){
+export async function sendEmail(to,subject, userName = '' , token){
     const transporter = nodemailer.createTransport({
         service:'gmail',
         auth: {
@@ -14,7 +15,7 @@ export async function sendEmail(to,subject,html){
         from: `RM Shop <${process.env.SENDEREMAIL}>`, // sender address
         to, // list of receivers
         subject, // Subject line
-        html, // html body
+        html: emailTemplete(to,userName, token), // html body
     });
 
     return info;
