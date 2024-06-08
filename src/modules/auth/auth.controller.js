@@ -5,7 +5,9 @@ import { sendEmail } from "../../utils/email.js";
 import { customAlphabet, nanoid } from 'nanoid'
 
 
+
 export const registor = async (req, res) => {
+    
     const { userName, email, password } = req.body;
     
 
