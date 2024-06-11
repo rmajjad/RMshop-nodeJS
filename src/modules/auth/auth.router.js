@@ -10,8 +10,8 @@ const router = Router();
 router.post('/registor',valedation(schema.registerSchema),checkEmail,asyncHandler(Controller.registor));
 router.get('/confirmEmail/:token',Controller.confirmEmail);
 router.post('/login',Controller.login);
-router.patch('/sendCode',Controller.sendCode);
-router.patch('/forgotPassword',Controller.forgotPassword);
+router.patch('/sendCode',valedation(schema.sendCodeSchema),Controller.sendCode);
+router.patch('/forgotPassword',valedation(schema.forgetPasswordSchema),Controller.forgotPassword);
 
 
 export default router; 

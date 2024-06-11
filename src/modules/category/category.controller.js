@@ -6,7 +6,7 @@ import cloudinary from "../../utils/cloudinary.js";
 
 
 export const create = async(req, res, next) => {
-
+    
     req.body.name = req.body.name.toLowerCase();
     
     if(await categoryModel.findOne({name:req.body.name})){

@@ -1,7 +1,11 @@
 export const valedation = (schema)=>{
     return (req,res,next)=>{
         const errorMessage = [];
-        const {error} = schema.validate(req.body,{abortEarly:false});
+        const filterData = {...req.body,...req.query,...req.params};
+        if(req.file){[
+            filterData.image = req.file
+        ]}
+        const {error} = schema.validate(filterData,{abortEarly:false});
             if(error) {
                 error.details.forEach(err =>{
                     const key = err.context.key;
