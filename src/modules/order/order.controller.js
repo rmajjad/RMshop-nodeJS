@@ -4,7 +4,8 @@ import couponModel from "../../../DB/model/Coupon.model.js";
 import orderModel from "../../../DB/model/Order.model.js";
 import productModel from "../../../DB/model/Product.model.js";
 import userModel from "../../../DB/model/User.model.js";
-
+import Stripe from 'stripe';
+const stripe = new Stripe('sk_test_51PSdEMRxxV70AyP3lHU9H6lLeCMw0QUWTuhrZpOOICbIutKll3qfORmJAN43KBzBPYoyozCe5492I3b3rKcWPfzd00URgnJsCe');
 
 
 
@@ -63,6 +64,23 @@ export const create = async(req, res) => {
         req.body.phone = user.phone;
     }
     
+    const session = await stripe.checkout.sessions.create({
+        line_items:[{
+            price_data: {
+                currency: 'USD', 
+                unit_amount: subTotal - (subTotal * ((req.body.coupon?.amount || 0))/100), 
+                product_data: {
+                    name: user.userName,
+                }
+            },
+            quantity: 1,
+        }],
+        mode: 'payment',
+        success_url: `https://www.facebook.com/`,
+        cancel_url: `https://www.youtube.com/`,   
+    });
+    return res.json(session);
+
     const order = await orderModel.create({
         userId: req.user._id,
         products: finalProductList,

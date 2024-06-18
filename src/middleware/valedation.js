@@ -1,10 +1,14 @@
 export const valedation = (schema)=>{
     return (req,res,next)=>{
         const errorMessage = [];
-        const filterData = {...req.body,...req.query,...req.params};
-        if(req.file){[
-            filterData.image = req.file
-        ]}
+        let filterData = {};
+        if(req.file){
+            filterData = {image:req.file,...req.body,...req.query,...req.params}
+        }else if(req.files){
+            filterData = {...req.files,...req.body,...req.query,...req.params}
+        }else{
+            filterData = {...req.body,...req.query,...req.params}
+        }
         const {error} = schema.validate(filterData,{abortEarly:false});
             if(error) {
                 error.details.forEach(err =>{
@@ -13,7 +17,7 @@ export const valedation = (schema)=>{
                 })
                 return res.status(400).json({message:"valedation error", errorMessage}); 
             }
-            next();
+            next();  
     }
     
 }

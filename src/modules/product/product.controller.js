@@ -7,6 +7,7 @@ import { pagenation } from "../../utils/pagenation.js";
 
 
 export const create = async (req, res) => {
+    //return res.json(req.files) 
 
     const { name, price, discount, categoryId, subcategoryId } = req.body;
     const checkCategory = await categoryModel.findById(categoryId);
@@ -29,12 +30,13 @@ export const create = async (req, res) => {
         const { secure_url, public_id } = await cloudinary.uploader.upload(req.files.mainImage[0].path, { folder: `${process.env.APPNAME}/product/${name}` });
         req.body.mainImage = { secure_url, public_id };
         req.body.subImages = [];
+        if(req.files.subImages){
         for (const file of req.files.subImages) {
             const { secure_url, public_id } = await cloudinary.uploader.upload(file.path,
                 { folder: `${process.env.APPNAME}/product/${name}/subImages` });
             req.body.subImages.push({ secure_url, public_id });
         }
-
+    }
 
         const product = await productModel.create(req.body);
         return res.json({ message: "success", product });
@@ -70,7 +72,15 @@ export const getAll = async (req, res) => {
         });
     }
     mongooseQuery.select(req.query.fields);
-    const products = await mongooseQuery;
+    let products = await mongooseQuery;
+
+    products = products.map(product =>{
+        return{
+            ...product.toObject(),
+            mainImage: product.mainImage.secure_url,
+            subImages: product.subImages.map(img => img.secure_url),
+        }
+    })
 
     return res.json({ message: "success", count, products });
 
