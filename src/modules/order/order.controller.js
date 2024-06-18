@@ -5,7 +5,7 @@ import orderModel from "../../../DB/model/Order.model.js";
 import productModel from "../../../DB/model/Product.model.js";
 import userModel from "../../../DB/model/User.model.js";
 import Stripe from 'stripe';
-const stripe = new Stripe('sk_test_51PSdEMRxxV70AyP3lHU9H6lLeCMw0QUWTuhrZpOOICbIutKll3qfORmJAN43KBzBPYoyozCe5492I3b3rKcWPfzd00URgnJsCe');
+const stripe = new Stripe(process.env.STRIPE_SECRET);
 
 
 
@@ -79,7 +79,7 @@ export const create = async(req, res) => {
         success_url: `https://www.facebook.com/`,
         cancel_url: `https://www.youtube.com/`,   
     });
-    return res.json(session);
+    
 
     const order = await orderModel.create({
         userId: req.user._id,
